@@ -4,5 +4,5 @@
   #### For Server environment ====> Node (express)
   #### For Database ====> PostgreSQL
   #### For ORM ====> Prisma
-  #### To protect user's password ====> BCrypt-Security
+  #### For user's password protection ====> BCrypt-Security
   #### For Login authorization ====> JWT
