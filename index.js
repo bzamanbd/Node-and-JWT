@@ -13,7 +13,6 @@ app.get("/", (req,res)=>{
 })
 
 //===>Routes file<===///
-
 app.use(routes)
 
 

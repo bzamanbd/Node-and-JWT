@@ -26,3 +26,18 @@ try {
     })
 }
 }
+
+export const login = async(req,res)=>{ 
+    const {email,password} = req.body
+    try {
+        const user = await prisma.user.findUnique({ where:{email}})
+        if (user && await bcrypt.compare(password, user.password)) {
+        }        
+    } catch (e) {
+        res.status(500).json({ 
+            error:"Something went wrong!", 
+            e
+        })
+    } 
+
+}
