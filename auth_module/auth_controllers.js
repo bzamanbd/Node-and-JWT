@@ -33,8 +33,8 @@ export const signin = async(req,res)=>{
     const {email,password} = req.body
     try {
         const user = await prisma.user.findUnique({ where:{email}})
-        if (user && await bcrypt.compare(password, user.password)) {
-            const tocken = jwt.sign({userId:user.id},process.env.JWT_SECRET,{ expiresIn: '1h' }) 
+        if (user && bcrypt.compare(password, user.password)) {
+            const tocken = jwt.sign({userId:user.id},process.env.JWT_SECRET,{expiresIn: '30m'}) 
             return res.status(200).json({ 
                 message:"Login success!", 
                 tocken
