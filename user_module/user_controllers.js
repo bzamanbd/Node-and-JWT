@@ -1,5 +1,6 @@
 import prisma from "../db_client/prisma_client.js"
 
+
 export const viewProfile = async (req,res)=>{
     try {
         const user = await prisma.user.findUnique({where:{ id: req.userId }})
@@ -43,4 +44,26 @@ export const editProfile = async (req,res)=>{
             e
         })
     }
+}
+
+export const fetchUsers = async(req,res)=>{ 
+    try {
+        const users = await prisma.user.findMany({})
+        if (users.length < 1) {
+            return res.status(200).json({ 
+                message : "No user in available", 
+                users
+            })
+        }
+        return res.status(200).json({ 
+            message:`Total ${users.length} user found`, 
+            users
+        })
+    } catch (e) {
+        return res.status(500).json({ 
+            error:"Something went wrong", 
+            e
+        })
+    }
+    
 }
