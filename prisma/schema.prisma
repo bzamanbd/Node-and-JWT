@@ -30,7 +30,8 @@ model Post{
   userId Int
   title String 
   description String? @default("") 
-  comment Comment[]
+  comment Comment[] 
+  commentCount Int
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt()
   
@@ -44,7 +45,7 @@ model Comment{
   user User @relation(fields: [userId],references: [id], onDelete: Cascade)
   userId Int
   comment String 
-  commentCount Int
+  commentCount Int? @default(0)
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt()
 }

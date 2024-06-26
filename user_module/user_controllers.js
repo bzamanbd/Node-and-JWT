@@ -3,7 +3,13 @@ import prisma from "../db_client/prisma_client.js"
 
 export const viewProfile = async (req,res)=>{
     try {
-        const user = await prisma.user.findUnique({where:{ id: req.userId }})
+        const user = await prisma.user.findUnique({
+            where:{ id: req.userId },
+            include:{ 
+                post:true,
+                comment:true,
+            }
+        })
         if (user) {
             return res.status(200).json({ 
                 message:`${user.name}'s profile`, 
@@ -48,7 +54,16 @@ export const editProfile = async (req,res)=>{
 
 export const fetchUsers = async(req,res)=>{ 
     try {
-        const users = await prisma.user.findMany({})
+        const users = await prisma.user.findMany({ 
+            include:{ 
+                post: { 
+                    select:{ 
+                        title:true
+                    }
+                }, 
+                comment:true
+            }
+        })
         if (users.length < 1) {
             return res.status(200).json({ 
                 message : "No user in available", 

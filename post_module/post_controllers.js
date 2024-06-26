@@ -43,7 +43,7 @@ export const fetchPosts = async(req,res)=>{
 
 export const viewPost = async (req,res)=>{
     try {
-        const user = await prisma.user.findUnique({where:{ id: req.userId }})
+        const post = await prisma.post.findUnique({where:{id}})
         if (user) {
             return res.status(200).json({ 
                 message:`${user.name}'s profile`, 
