@@ -43,7 +43,8 @@ model Comment{
   postId Int
   user User @relation(fields: [userId],references: [id], onDelete: Cascade)
   userId Int
-  comment String
+  comment String 
+  commentCount Int
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt()
 }
