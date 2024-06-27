@@ -5,7 +5,7 @@ export const createComment = async (req, res) => {
     const userId = req.userId
     try {
         const post = await prisma.post.findUnique({ where:{ id:Number(postId)}}) 
-        //   * Increase the comment counter
+        //Increase the comment counter
         await prisma.post.update({
             where: {id: post.id},
         data: {commentCount: {increment: 1}}
@@ -121,10 +121,15 @@ export const deleteComment = async (req,res)=>{
             return res.status(404).json({message:"Comment not found"})
         }
         await prisma.comment.delete({where:{id:comment.id}})
-        return res.status(200).json({ 
+        //decrement the comment counter
+        await prisma.post.update({
+                where: {id: comment.postId},
+                data: {commentCount: {decrement: 1}}
+            })
+        res.status(200).json({ 
             message:"Comment is deleted successfully"
         })
     } catch (e) {
-        return res.status(500).json({ error:"Something went wrong"}) 
+        res.status(500).json({ error:"Something went wrong"}) 
     }
 }
