@@ -1,7 +1,36 @@
 import prisma from "../db_client/prisma_client.js"
 
+export const createComment = async (req, res) => {
+    const {postId, comment } = req.body
+    const userId = req.userId
+    try {
+        const post = await prisma.post.findUnique({ where:{ id:Number(postId)}}) 
+        //   * Increase the comment counter
+        await prisma.post.update({
+            where: {id: post.id},
+        data: {commentCount: {increment: 1}}
+    })
+    const newComent = await prisma.comment.create({ 
+        data:{ 
+            userId, 
+            postId:post.id, 
+            comment
+        }
+    })
+    res.status(201).json({ 
+        message:"New comment is created", 
+        newComent
+    })  
+    } catch (err) {
+        res.status(500).json({ 
+            error:"Something went wrong", 
+            err
+        })
+    }
 
-export const viewProfile = async (req,res)=>{
+  }
+
+export const viewComment = async (req,res)=>{
     try {
         const user = await prisma.user.findUnique({ 
             where:{ id: req.userId },
@@ -32,7 +61,7 @@ export const viewProfile = async (req,res)=>{
     }
 }
 
-export const editProfile = async (req,res)=>{ 
+export const editComment = async (req,res)=>{ 
     const playload = req.body 
     const id = req.userId
     try {
@@ -56,38 +85,18 @@ export const editProfile = async (req,res)=>{
     }
 }
 
-export const fetchUsers = async(req,res)=>{ 
+export const fetchComments = async(req,res)=>{ 
     try {
-        const users = await prisma.user.findMany({ 
-           select:{ 
-            id:true, 
-            name:true, 
-            email:true,
-            // post:{ 
-            //     select:{ 
-            //         id:true,
-            //         title:true,
-            //          commentCount:true,
-            //     }
-            // },
-            _count:{ 
-                select:{ 
-                    post:true,
-                    comment:true,
-                }
-            }
-           },
-          
-        })
-        if (users.length < 1) {
+        const comments = await prisma.comment.findMany({})
+        if (comments.length < 1) {
             return res.status(200).json({ 
-                message : "No user in available", 
-                users
+                message : "No comment available", 
+                comments
             })
         }
         return res.status(200).json({ 
-            message:`Total ${users.length} user found`, 
-            users
+            message:`Total ${comments.length} comment found`, 
+            comments
         })
     } catch (e) {
         return res.status(500).json({ 
@@ -98,15 +107,22 @@ export const fetchUsers = async(req,res)=>{
     
 }
 
-export const deleteUser = async (req,res)=>{ 
+export const deleteComment = async (req,res)=>{ 
+    const commentId = req.params.id
+    const userId = req.userId
     try { 
-        const user = await prisma.user.findUnique({where:{id:req.userId}}) 
-        if (!user) {
-            return res.status(404).json({message:"User not found"})
+        const comment = await prisma.comment.findUnique({
+            where:{
+                id:Number(commentId), 
+                userId,
+            }
+        }) 
+        if (!comment) {
+            return res.status(404).json({message:"Comment not found"})
         }
-        await prisma.user.delete({where:{id:req.userId}})
+        await prisma.comment.delete({where:{id:comment.id}})
         return res.status(200).json({ 
-            message:"User deleted successfully"
+            message:"Comment is deleted successfully"
         })
     } catch (e) {
         return res.status(500).json({ error:"Something went wrong"}) 
