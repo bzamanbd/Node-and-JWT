@@ -4,8 +4,8 @@ import { createPost,fetchPosts,viewPost,editPost,deletePost } from "./post_contr
 
 const routes = Router() 
 
-routes.get("/",fetchPosts) 
-routes.get("/:id",viewPost) 
+routes.get("/",authMiddleware,fetchPosts) 
+routes.get("/:id", authMiddleware,viewPost) 
 routes.put("/:id",authMiddleware, editPost) 
 routes.delete("/:id",authMiddleware, deletePost) 
 routes.post("/post", authMiddleware,createPost)

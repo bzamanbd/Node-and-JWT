@@ -87,7 +87,30 @@ export const editComment = async (req,res)=>{
 
 export const fetchComments = async(req,res)=>{ 
     try {
-        const comments = await prisma.comment.findMany({})
+        const comments = await prisma.comment.findMany({ 
+            select:{ 
+                id:true, 
+                comment:true,
+                createdAt:true, 
+                updatedAt:true,
+                post:{ 
+                    select:{ 
+                        id:true, 
+                        title:true, 
+                        commentCount:true,
+                        createdAt:true, 
+                        updatedAt:true,
+                    }
+                }, 
+                user:{ 
+                    select:{ 
+                        id:true, 
+                        name:true, 
+                        email:true,
+                    }
+                }
+            }
+        })
         if (comments.length < 1) {
             return res.status(200).json({ 
                 message : "No comment available", 

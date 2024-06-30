@@ -6,7 +6,7 @@ const routes = Router()
 
 routes.post("/comment",authMiddleware, createComment)
 routes.delete("/comment:id",authMiddleware, deleteComment)
-routes.get("/", fetchComments)
+routes.get("/", authMiddleware, fetchComments)
 
 
 export default routes
