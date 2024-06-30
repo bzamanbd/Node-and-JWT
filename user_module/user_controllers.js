@@ -81,7 +81,7 @@ export const fetchUsers = async(req,res)=>{
         })
         if (users.length < 1) {
             return res.status(200).json({ 
-                message : "No user in available", 
+                message : "No user available", 
                 users
             })
         }

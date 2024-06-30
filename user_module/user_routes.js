@@ -7,6 +7,6 @@ const routes = Router()
 routes.get("/profile", authMiddleware, viewProfile)
 routes.put("/profile", authMiddleware, editProfile)
 routes.delete("/profile",authMiddleware,deleteUser)
-routes.get("/users", fetchUsers)
+routes.get("/users",authMiddleware, fetchUsers)
 
 export default routes
