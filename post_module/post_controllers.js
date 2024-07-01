@@ -43,7 +43,7 @@ export const fetchPosts = async(req,res)=>{
            },
         where:{ 
             commentCount:{ 
-                gt:0,
+                gt:1,
             }
         }
         })
