@@ -63,13 +63,6 @@ export const fetchUsers = async(req,res)=>{
             id:true, 
             name:true, 
             email:true,
-            // post:{ 
-            //     select:{ 
-            //         id:true,
-            //         title:true,
-            //          commentCount:true,
-            //     }
-            // },
             _count:{ 
                 select:{ 
                     post:true,

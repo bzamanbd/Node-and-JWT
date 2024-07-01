@@ -37,7 +37,15 @@ export const fetchPosts = async(req,res)=>{
                     updatedAt:true,
                 }
             }
-           }
+           }, 
+           orderBy:{ 
+            id:"desc"
+           },
+        where:{ 
+            commentCount:{ 
+                gt:0,
+            }
+        }
         })
         return res.status(200).json({ 
             message: `Total ${posts.length} posts found`, 
