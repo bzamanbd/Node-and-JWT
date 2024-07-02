@@ -5,7 +5,7 @@ import { createPost,fetchPosts,viewPost,editPost,deletePost,searchPost} from "./
 const routes = Router() 
 
 routes.get("/",authMiddleware,fetchPosts) 
-routes.get("/",authMiddleware,searchPost)
+routes.get("/search",authMiddleware,searchPost)
 routes.get("/:id", authMiddleware,viewPost) 
 routes.put("/:id",authMiddleware, editPost) 
 routes.delete("/:id",authMiddleware, deletePost) 
