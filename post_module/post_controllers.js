@@ -25,9 +25,19 @@ export const createPost = async (req,res)=>{
 }
 
 export const fetchPosts = async(req,res)=>{  
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || 10
+    if (page <= 0) {
+        page = 1
+    }
+    if (limit <=0 || limit >100) {
+        limit = 10
+    }
+    const skip = (page - 1)*limit
     try {
-        
         const posts  = await prisma.post.findMany({ 
+            skip:skip, 
+            take:limit,
            include:{ 
             comment:{ 
                 select:{ 
@@ -65,10 +75,16 @@ export const fetchPosts = async(req,res)=>{
 
         })
 
-    
+        const totalPosts = await prisma.post.count()
+        const totalPages = Math.ceil(totalPosts/limit) 
         return res.status(200).json({ 
             message: `Total ${posts.length} posts found`, 
-            posts
+            posts,
+            meta:{ 
+                totalPages,
+                currentPage:page,
+                limit:limit
+            }
         })
     } catch (e) {
         return res.status(500).json({ 
