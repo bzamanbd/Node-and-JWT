@@ -26,6 +26,7 @@ export const createPost = async (req,res)=>{
 
 export const fetchPosts = async(req,res)=>{  
     try {
+        
         const posts  = await prisma.post.findMany({ 
            include:{ 
             comment:{ 
@@ -41,12 +42,30 @@ export const fetchPosts = async(req,res)=>{
            orderBy:{ 
             id:"desc"
            },
+        // where:{ 
+        //     commentCount:{ 
+        //         gt:0,
+        //     }
+        // }, 
+
         where:{ 
-            commentCount:{ 
-                gt:1,
-            }
-        }
+            AND:[ 
+                {
+                    title:{ 
+                        startsWith:"Rafi"
+                    }
+                },
+                { 
+                    title:{ 
+                        endsWith:"Two"
+                    }
+                }
+            ]
+        },
+
         })
+
+    
         return res.status(200).json({ 
             message: `Total ${posts.length} posts found`, 
             posts
@@ -148,5 +167,34 @@ export const deletePost = async (req,res)=>{
         })
     } catch (e) {
         return res.status(500).json({ error:"Something went wrong"}) 
+    }
+}
+
+export const searchPost = async(req,res)=>{ 
+    const query = req.query.q
+    try {
+        const posts = await prisma.post.findMany({ 
+            where:{ 
+                description:{ 
+                    search:query
+                }
+            }
+        })
+        if (!posts) {
+            return res.status(200).json({ 
+            message:"No post found!", 
+            posts    
+            })
+        }
+        res.status(200).json({ 
+            message:`${posts.length} post found`, 
+            posts
+        })
+        
+    } catch (e) {
+        return res.status(500).json({ 
+            error:"Something went wrong", 
+            e
+        })
     }
 }
