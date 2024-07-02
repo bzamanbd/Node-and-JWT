@@ -49,29 +49,29 @@ export const fetchPosts = async(req,res)=>{
                 }
             }
            }, 
-           orderBy:{ 
-            id:"desc"
-           },
+        //    orderBy:{ 
+        //     id:"desc"
+        //    },
         // where:{ 
         //     commentCount:{ 
         //         gt:0,
         //     }
         // }, 
 
-        where:{ 
-            AND:[ 
-                {
-                    title:{ 
-                        startsWith:"Rafi"
-                    }
-                },
-                { 
-                    title:{ 
-                        endsWith:"Two"
-                    }
-                }
-            ]
-        },
+        // where:{ 
+        //     AND:[ 
+        //         {
+        //             title:{ 
+        //                 startsWith:"Rafi"
+        //             }
+        //         },
+        //         { 
+        //             title:{ 
+        //                 endsWith:"Two"
+        //             }
+        //         }
+        //     ]
+        // },
 
         })
 
