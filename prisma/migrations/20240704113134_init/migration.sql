@@ -4,6 +4,7 @@ CREATE TABLE "User" (
     "name" TEXT DEFAULT '',
     "email" TEXT NOT NULL,
     "password" TEXT,
+    "avatar" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -24,6 +25,15 @@ CREATE TABLE "Post" (
 );
 
 -- CreateTable
+CREATE TABLE "PostPhoto" (
+    "id" SERIAL NOT NULL,
+    "url" TEXT NOT NULL,
+    "postId" INTEGER NOT NULL,
+
+    CONSTRAINT "PostPhoto_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
     "postId" INTEGER NOT NULL,
@@ -40,6 +50,9 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PostPhoto" ADD CONSTRAINT "PostPhoto_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;

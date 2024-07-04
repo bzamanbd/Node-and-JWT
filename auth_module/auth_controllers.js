@@ -6,7 +6,8 @@ import 'dotenv/config'
 
 export const signup = async(req, res)=>{ 
 const {name,email,password} = req.body 
-const hashedPass = await bcrypt.hash(password, 10)
+const hashedPass = await bcrypt.hash(password, 10) 
+const avatar = req.file ? req.file.path : "";
 try { 
     const findUser = await prisma.user.findUnique({ where:{email}}) 
     if (findUser) {
@@ -15,7 +16,7 @@ try {
         })
     }
     const user = await prisma.user.create({ 
-        data:{name,email,password:hashedPass}
+        data:{name,email,password:hashedPass,avatar}
     })
     res.status(201).json({ 
         message:"Account is created", 
