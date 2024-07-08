@@ -3,26 +3,63 @@ import prisma from "../db_client/prisma_client.js"
 export const createPost = async (req,res)=>{
     const {title,description} = req.body 
     const userId = req.userId
+    const images = req.processedFiles;
+    if (!images || images.length === 0) {
+        return res.status(400).json({ error: 'No images processed' });
+      }
+
     try {
         if (!userId) {
             return res.status(401).status({ 
                 message:"Authorization Required. Please login to create post"
             })
         }
+
         const post = await prisma.post.create({
-            data: { title,description,userId }
-            })
-        return res.status(201).json({ 
-            message:"Post created successfully", 
-            post
-        })
-    } catch (e) {
-        return res.status(500).json({ 
-            error:"Something went wrong", 
-            e
-        })
-    }
-}
+            data: {
+              title,
+              description,
+              userId,
+              images: {
+                create: images.map(image => ({ url: image }))
+              }
+            },
+            include: {
+                images: true
+              }
+          });
+    
+          res.status(201).json(post);
+        } catch (err) {
+          res.status(400).json({ error: err.message });
+        }
+      };
+
+
+
+    //     const post = await prisma.post.create({
+    //         data: { 
+    //             title,
+    //             description,
+    //             userId,
+    //             images:{ 
+    //                 create:images.map(image=>({url:image}))
+    //             }
+    //          },
+    //          include:{images:true }
+    //         })
+    //     return res.status(201).json({ 
+    //         message:"Post created successfully", 
+    //         post
+    //     })
+    // } catch (e) {
+    //     return res.status(500).json({ 
+    //         error:"Post not created. Something went wrong", 
+    //         e
+    //     })
+    // }
+
+
 
 export const fetchPosts = async(req,res)=>{  
     const page = Number(req.query.page) || 1
