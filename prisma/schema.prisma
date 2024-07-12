@@ -18,8 +18,8 @@ model User{
   id Int @id @default(autoincrement())
   name String? @default("")
   email String @unique
-  password String? 
-  avatar String?
+  password String? @default("")
+  avatar String? @default("")
   post Post[]
   comment Comment[]
   createdAt DateTime @default(now()) 
@@ -31,23 +31,31 @@ model Post{
   user User @relation(fields: [userId], references: [id],onDelete: Cascade) 
   userId Int
   title String 
-  description String? @default("") 
+  description String? @default("")
   images Image[]
+  videos Video[]
   comment Comment[] 
   commentCount Int @default(0)
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt()
   
 }
-
-model Image{ 
-  id Int @id @default(autoincrement()) 
+model Image {
+  id Int @id @default(autoincrement())
   url String
-  post Post @relation(fields: [postId],references: [id], onDelete: Cascade)
   postId Int
+  post Post @relation(fields: [postId], references: [id],onDelete: Cascade)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
 }
+
+model Video {
+  id Int @id @default(autoincrement())
+  url String
+  postId Int
+  post Post @relation(fields: [postId], references: [id],onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
 
 model Comment{ 
   id Int @id @default(autoincrement())

@@ -21,11 +21,10 @@ app.get("/", (req,res)=>{
 
 app.use(routes)
 
-
-
-
-
-
-
-
-app.listen(port,()=>console.log(`server runs on http://localhost:${port}`))
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send({ error: err.message });
+  });
+const server = app.listen(port,()=>console.log(`server runs on http://localhost:${port}`))
+server.timeout = 120000; // 2 minutes

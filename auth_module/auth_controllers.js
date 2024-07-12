@@ -7,7 +7,7 @@ import 'dotenv/config'
 export const signup = async(req, res)=>{ 
 const {name,email,password} = req.body 
 const hashedPass = await bcrypt.hash(password, 10) 
-const avatar = req.file ? req.file.path : "";
+const avatar = req.file ? req.processedAvatar : "";
 try { 
     const findUser = await prisma.user.findUnique({ where:{email}}) 
     if (findUser) {

@@ -3,10 +3,6 @@ import prisma from "../db_client/prisma_client.js"
 export const createPost = async (req,res)=>{
     const {title,description} = req.body 
     const userId = req.userId
-    const images = req.processedFiles;
-    if (!images || images.length === 0) {
-        return res.status(400).json({ error: 'No images processed' });
-      }
 
     try {
         if (!userId) {
@@ -21,12 +17,16 @@ export const createPost = async (req,res)=>{
               description,
               userId,
               images: {
-                create: images.map(image => ({ url: image }))
+                create: req.processedFiles.images
+              }, 
+              videos:{ 
+                create: req.processedFiles.videos
               }
             },
             include: {
-                images: true
-              }
+                images: true,
+                videos:true,
+            }
           });
     
           res.status(201).json(post);
