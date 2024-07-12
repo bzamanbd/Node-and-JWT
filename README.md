@@ -11,13 +11,27 @@
   #### For Vedio compress ====> Fluent-ffmpeg
 
 Sign Up
-![signup-user](https://github.com/bzamanbd/Node-and-JWT/assets/90719674/698f6487-fa58-449c-a5ae-dd3b04b6fc4b)
+
+![SignUp](https://github.com/user-attachments/assets/59c2556f-b797-4f3d-a811-08e4999ba330)
 
 Sign In
-![signin-user-tocken](https://github.com/bzamanbd/Node-and-JWT/assets/90719674/99498766-84d9-4bb1-89b6-c3d3f7d2ce04)
 
-View Profile
-![view-profile-using-tocken](https://github.com/bzamanbd/Node-and-JWT/assets/90719674/0cfff031-ea22-4416-ab8a-ff5789625f6a)
+![Login](https://github.com/user-attachments/assets/aea5588b-c9e2-41ab-beb8-91f873566fe7)
+
+Fetch Users
+
+![FetchUsers](https://github.com/user-attachments/assets/2e561033-bbaf-4691-990a-163343267bb9)
+
+Fetch Posts
+
+![FetchPosts](https://github.com/user-attachments/assets/bfb034e1-7106-45bd-9d0e-6c376df4aac3)
+
+Get Post by PostId
+![GetPostbyPostId](https://github.com/user-attachments/assets/d090e2ad-f650-40ba-a33b-659b6c4e7708)
+
+
+
+
 
 
 
