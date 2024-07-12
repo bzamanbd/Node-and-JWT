@@ -63,6 +63,7 @@ export const fetchUsers = async(req,res)=>{
             id:true, 
             name:true, 
             email:true,
+            avatar:true,
             _count:{ 
                 select:{ 
                     post:true,

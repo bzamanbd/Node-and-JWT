@@ -35,32 +35,6 @@ export const createPost = async (req,res)=>{
         }
       };
 
-
-
-    //     const post = await prisma.post.create({
-    //         data: { 
-    //             title,
-    //             description,
-    //             userId,
-    //             images:{ 
-    //                 create:images.map(image=>({url:image}))
-    //             }
-    //          },
-    //          include:{images:true }
-    //         })
-    //     return res.status(201).json({ 
-    //         message:"Post created successfully", 
-    //         post
-    //     })
-    // } catch (e) {
-    //     return res.status(500).json({ 
-    //         error:"Post not created. Something went wrong", 
-    //         e
-    //     })
-    // }
-
-
-
 export const fetchPosts = async(req,res)=>{  
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || 10
@@ -74,18 +48,38 @@ export const fetchPosts = async(req,res)=>{
     try {
         const posts  = await prisma.post.findMany({ 
             skip:skip, 
-            take:limit,
-           include:{ 
-            comment:{ 
-                select:{ 
-                    id:true, 
-                    comment:true, 
-                    userId:true, 
-                    createdAt:true, 
-                    updatedAt:true,
+            take:limit, 
+            select:{ 
+                id:true, 
+                userId:true, 
+                title:true, 
+                description:true, 
+                images:true, 
+                videos:true,
+                commentCount:true, 
+                createdAt:true, 
+                updatedAt:true,
+                comment:{ 
+                    select:{ 
+                        id:true, 
+                        userId:true,
+                        comment:true, 
+                        createdAt:true,
+                    }
                 }
+
             }
-           }, 
+        //    include:{  
+        //     comment:{ 
+        //         select:{ 
+        //             id:true, 
+        //             comment:true, 
+        //             userId:true, 
+        //             createdAt:true, 
+        //             updatedAt:true,
+        //         }
+        //     }
+        //    }, 
         //    orderBy:{ 
         //     id:"desc"
         //    },
@@ -139,17 +133,18 @@ export const viewPost = async (req,res)=>{
             where:{
             id:Number(postId)
         }, 
-        include:{ 
-            comment:{ 
-                select:{ 
-                    id:true, 
-                    userId:true, 
-                    comment:true, 
-                    createdAt:true, 
-                    updatedAt:true,
-                }
-            }
-        }
+        select:{ 
+            id:true, 
+            userId:true, 
+            title:true, 
+            description:true, 
+            images:true,
+            videos:true,
+            commentCount:true,
+            createdAt:true, 
+            updatedAt:true, 
+            comment:true 
+        },
     })
         if (!post) {
             return res.status(404).json({ 

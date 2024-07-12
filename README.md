@@ -1,4 +1,4 @@
-# A Basic Node App
+# A Basic Blog App with Node
 
 ## Technologies are used
   #### For Server environment ====> Node (express)
@@ -6,6 +6,9 @@
   #### For ORM ====> Prisma
   #### For user's password protection ====> BCrypt-Security
   #### For Login authorization ====> JWT
+  #### For Media upload ====> Multer
+  #### For Image compress ====> Sharp
+  #### For Vedio compress ====> Fluent-ffmpeg
 
 Sign Up
 ![signup-user](https://github.com/bzamanbd/Node-and-JWT/assets/90719674/698f6487-fa58-449c-a5ae-dd3b04b6fc4b)

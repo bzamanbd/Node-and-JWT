@@ -4,7 +4,6 @@ import sharp from 'sharp';
 import fs from 'fs';
 import ffmpeg from 'fluent-ffmpeg';
 
-// Define storage for Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = path.join(path.resolve(), 'public/media');
@@ -18,11 +17,10 @@ const storage = multer.diskStorage({
   }
 });
 
-// Multer configuration with file type filter (allow both images and videos)
 const mediaUploader = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
-    // Allow only image and video files
+    
     if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {
       cb(null, true);
     } else {
@@ -31,7 +29,7 @@ const mediaUploader = multer({
   }
 });
 
-// Custom middleware to process images
+
 const processImages = async (files) => {
   if (!files || files.length === 0) {
     return [];
@@ -43,10 +41,10 @@ const processImages = async (files) => {
       
       await sharp(file.path)
         .resize(300)
-        .jpeg({quality:50}) // Resize the image to 800px width (adjust as needed)
+        .jpeg({quality:60}) 
         .toFile(outputFilePath);
 
-      fs.unlinkSync(file.path); // Delete original file
+      fs.unlinkSync(file.path); 
 
       return { url: `/public/media/images/${path.basename(outputFilePath)}` };
     })
@@ -55,7 +53,6 @@ const processImages = async (files) => {
   return processedImages;
 };
 
-// Custom middleware to process videos
 const processVideos = async (files) => {
   if (!files || files.length === 0) {
     return [];
@@ -71,7 +68,7 @@ const processVideos = async (files) => {
           .videoCodec('libx264')
           .size('360x?')
           .on('end', () => {
-            fs.unlinkSync(file.path); // Delete original file
+            fs.unlinkSync(file.path); 
             resolve({ url: `/public/media/videos/${path.basename(outputFilePath)}` });
           })
           .on('error', (err) => {
@@ -85,7 +82,7 @@ const processVideos = async (files) => {
   return processedVideos;
 };
 
-// Custom middleware to handle all media files
+
 const mediaProcessor = async (req, res, next) => {
   try {
     const imageFiles = req.files.images || [];

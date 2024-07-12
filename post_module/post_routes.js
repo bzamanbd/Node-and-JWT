@@ -6,10 +6,10 @@ import { mediaUploader, mediaProcessor } from "../middlewares/media_uploader.js"
 
 const routes = Router() 
 
-routes.get("/",authMiddleware,fetchPosts) 
+routes.get("/",fetchPosts) 
 routes.get("/search",authMiddleware,searchPost)
-routes.get("/:id", authMiddleware,viewPost) 
+routes.get("/:id", viewPost) 
 routes.put("/:id",authMiddleware, editPost) 
 routes.delete("/:id",authMiddleware, deletePost) 
-routes.post("/post", authMiddleware,mediaUploader.fields([{name:'images',maxCount:5},{name:'videos',maxCount:3}]),mediaProcessor,createPost)
+routes.post("/post", authMiddleware,mediaUploader.fields([{name:'images',maxCount:5},{name:'videos',maxCount:2}]),mediaProcessor,createPost)
 export default routes

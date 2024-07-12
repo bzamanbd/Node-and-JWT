@@ -10,11 +10,11 @@ const fileFilter = (req, file, cb) => {
   cb(null, true);
 }
 const limits = {
-  fileSize: 10 * 1024 * 1024, // 10 MB file size limit per file
-  files: 1, // Maximum 10 files per request
-  fields: 20, // Maximum 20 non-file fields per request
-  parts: 30, // Maximum 30 parts (files + fields) per request
-  headerPairs: 2000 // Maximum 2000 header key-value pairs to parse
+  fileSize: 10 * 1024 * 1024,
+  files: 1, 
+  fields: 20,
+  parts: 30, 
+  headerPairs: 2000
 };
 
 const storage = multer.diskStorage({
@@ -35,10 +35,11 @@ const avatarProcessor = async(req, res, next)=>{
   const outputFilePath = path.join(path.resolve(), 'public/avatar', `${Date.now()}-compressed-${req.file.filename}`);
   try {
     await sharp(req.file.path)
-    .resize(80) // Resize the image to 800px width (adjust as needed)
+    .resize(100)
+    .jpeg({quality:80}) 
     .toFile(outputFilePath);
   
-    fs.unlinkSync(req.file.path); // Delete original file
+    fs.unlinkSync(req.file.path);
     req.processedAvatar = `public/avatar/${path.basename(outputFilePath)}`
     console.log('Success: avatar is compressed');
     next();
