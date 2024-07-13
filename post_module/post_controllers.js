@@ -163,11 +163,30 @@ export const viewPost = async (req,res)=>{
     }
 }
 
-export const editPost = async (req,res)=>{ 
-    const payload = req.body 
+export const editPost = async (req,res)=>{  
+    const {title, description, deleteImages, deleteVideos} = req.body 
     const postId = req.params.id
     const userId = req.userId
     try {
+        const imagesToDelete = deleteImages ? deleteImages.split(',').map(Number) : []
+        const videosToDelete = deleteVideos ? deleteVideos.split(',').map(Number) : []
+
+        if (imagesToDelete.length > 0) {
+            await prisma.image.deleteMany({
+                where: {
+                    id: { in: imagesToDelete }
+                }
+            });
+        }
+
+        if (videosToDelete.length > 0) {
+            await prisma.video.deleteMany({
+                where: {
+                    id: { in: videosToDelete }
+                }
+            });
+        }
+
         const oldPost = await prisma.post.findUnique({ 
             where:{
                 id:Number(postId), 
@@ -183,8 +202,22 @@ export const editPost = async (req,res)=>{
             where:{ 
                 id:oldPost.id
             },
-            data:payload 
+            data:{ 
+                title,
+                description,
+                images: {
+                create: req.processedFiles.images
+              }, 
+              videos:{ 
+                create: req.processedFiles.videos
+              }
+            },
+            include: {
+                images: true,
+                videos:true,
+            }
         })
+        
         res.status(200).json({ 
             message:"Post is updated successfully", 
             post
@@ -219,14 +252,22 @@ export const deletePost = async (req,res)=>{
 }
 
 export const searchPost = async(req,res)=>{ 
-    const query = req.query.q
+    const { query } = req.query
+    if (!query) {
+        return res.status(400).send('Query parameter is required');
+    }
     try {
         const posts = await prisma.post.findMany({ 
             where:{ 
-                description:{ 
-                    search:query
-                }
-            }
+                OR: [ 
+                    { title: { contains: query, mode: 'insensitive' } },
+                    { description: { contains: query, mode: 'insensitive' } },
+                ]
+            },
+            include: {
+                images: true,
+                videos: true,
+            },
         })
         if (!posts) {
             return res.status(200).json({ 

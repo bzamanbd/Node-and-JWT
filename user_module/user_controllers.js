@@ -4,15 +4,22 @@ import prisma from "../db_client/prisma_client.js"
 export const viewProfile = async (req,res)=>{
     try {
         const user = await prisma.user.findUnique({ 
-            where:{ id: req.userId },
-            include:{ 
-                post:{ 
+            where:{ id: req.userId }, 
+            select:{ 
+                id:true,
+                name:true, 
+                email:true,
+                avatar:true, 
+                createdAt:true, 
+                updatedAt:true,
+                post: { 
                     select:{ 
-                        title:true, 
+                        title:true,
                         commentCount:true,
+
                     }
-                },
-            }
+                }
+            },
         })
         if (user) {
             return res.status(200).json({ 
